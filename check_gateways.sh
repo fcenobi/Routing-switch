@@ -27,6 +27,7 @@ fi
 # Инициализируем переменные
 init ()
 {
+    dns1="8.8.8.8"
     gw1="10.10.10.1"
     gw2="10.0.0.1"
     prefered_gw=${gw1}
@@ -37,7 +38,7 @@ init ()
     if1=`ifconfig ${dev_if1} | awk -F ' *|:' '/inet addr/{print $4}'`
     if2=`ifconfig ${dev_if2} | awk -F ' *|:' '/inet addr/{print $4}'`
 
-# Назначаем gateway как default для eth0
+# gateway as default for eth0
     /sbin/ip route add default via ${gw1} dev ${dev_if1}
 
 # Текущие статусы шлюзов: 0 - шлюз недоступен, 1 - шлюз работает
@@ -66,7 +67,8 @@ get_current_status ()
 
 # Get current status default gateway ISP1
     gw1_curr_packet_loss=`ping -I ${dev_if1} -c20 -l20 -q -W3 ${gw1} | grep loss | awk '{print $(NF-4)}' | cut -d"%" -f1`
-    if [ ${gw1_curr_packet_loss} -le ${gw1_max_packet_loss} ]
+    dns1_curr_packet_loss=`ping -I ${dev_if1} -c20 -l20 -q -W3 ${dns1} | grep loss | awk '{print $(NF-4)}' | cut -d"%" -f1`
+    if [ ${gw1_curr_packet_loss} -le ${gw1_max_packet_loss} -a ${dns1_curr_packet_loss} -le ${gw1_max_packet_loss} ]
     then
         echo `date +"%T %d.%m.%Y"`. "ISP1. [STATUS - OK]. Current packet loss on ${gw1} via ${dev_if1} is ${gw1_curr_packet_loss}%." >> ${log}
         gw1_curr_status=1
