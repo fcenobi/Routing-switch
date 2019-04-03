@@ -38,7 +38,7 @@ init ()
 # Отчищаем log-файл и сохраняем значения основных переменных
     clear_log
     echo `date +"%T %d.%m.%Y"`." Init environment OK. Check OpenVPN status every ${check_period}." >> ${log}
-    echo `date +"%T %d.%m.%Y"`." ISP1 [OpenVPN serverIP=${ovpn}, Google DNS=${dns1}]." >> ${log}
+    echo `date +"%T %d.%m.%Y"`." [OpenVPN server IP=${ovpn}, Google DNS=${dns1}]." >> ${log}
 }
 
 # Данная функция определяет текущее состояние OpenVPN шлюза.
