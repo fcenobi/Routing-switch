@@ -38,7 +38,7 @@ init ()
     if1=`ifconfig ${dev_if1} | awk -F ' *|:' '/inet addr/{print $4}'`
     if2=`ifconfig ${dev_if2} | awk -F ' *|:' '/inet addr/{print $4}'`
 
-# gateway as default for eth0
+# Назначаем gateway как default для eth0
     /sbin/ip route add default via ${gw1} dev ${dev_if1}
 
 # Текущие статусы шлюзов: 0 - шлюз недоступен, 1 - шлюз работает
