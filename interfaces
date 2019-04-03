@@ -9,19 +9,13 @@ iface lo inet loopback
 
 # The primary network interface
 auto ens160
-#iface ens160 inet dhcp
 iface ens160 inet static
 address 10.10.10.10
 netmask 255.255.255.0
-#gateway 10.10.10.1
-#dns-nameservers 10.10.10.1
 dns-nameservers 8.8.8.8
 
 # The secondary network interface
 auto ens192
-#iface ens192 inet dhcp
 iface ens192 inet static
 address 10.0.0.2
 netmask 255.255.255.0
-#gateway 10.0.0.1
-#dns-nameservers 8.8.8.8
