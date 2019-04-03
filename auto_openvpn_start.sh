@@ -30,7 +30,7 @@ init ()
     prefered_gw=${ovpn}
     dev_ovpn="tun0"
 
-    ovpn=`ifconfig ${dev_ovpn} | awk -F ' *|:' '/inet addr/{print $4}'`
+#   ovpn=`ifconfig ${dev_ovpn} | awk -F ' *|:' '/inet addr/{print $4}'`
 
 # Текущие статусы шлюзов: 0 - шлюз недоступен, 1 - шлюз работает
     gw1_curr_status=0
