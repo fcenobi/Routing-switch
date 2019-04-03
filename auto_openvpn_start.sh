@@ -1,6 +1,6 @@
 #!/bin/sh
 
-sleep 30s
+sleep 3s
 
 # Указываем путь к log-файлу
 log="/var/log/vpn_status.log"
@@ -69,7 +69,7 @@ get_current_status ()
     dev_tun=`ifconfig | grep tun0 | awk '{print $1}'`
     ovpn_curr_packet_loss=`ping -I ${dev_ovpn} -c20 -l20 -q -W3 ${dns1} | grep loss | awk '{print $(NF-4)}' | cut -d"%" -f1`
 
-    if [ ${ovpn_curr_packet_loss} -le ${gw1_max_packet_loss} -a "${dev_tun}" == "tun0" ]
+    if [ ${ovpn_curr_packet_loss} -le ${gw1_max_packet_loss} -a "${dev_tun}" = "tun0" ]
     then
         echo `date +"%T %d.%m.%Y"`. "ISP1. [STATUS - OK]. Current packet loss on ${ovpn} via ${dev_ovpn} is ${gw1_curr_packet_loss}%. And ${dev_tun} is up" >> ${log}
         gw1_curr_status=1
