@@ -68,17 +68,16 @@ get_current_status ()
 # Get current status default gateway ISP1/Проверяем пинги до DNS Google
     dev_tun=`ifconfig | grep tun0 | awk '{print $1}'`
     ovpn_curr_packet_loss=`ping -I ${dev_ovpn} -c20 -l20 -q -W3 ${dns1} | grep loss | awk '{print $(NF-4)}' | cut -d"%" -f1`
-#    dev_tun=`ifconfig | grep tun0 | awk '{print $1}'`
 
-    if [ "${dev_tun}" == "tun0" -a ${ovpn_curr_packet_loss} -le ${gw1_max_packet_loss} ]
+    if [ ${ovpn_curr_packet_loss} -le ${gw1_max_packet_loss} -a "${dev_tun}" == "tun0" ]
     then
-        echo `date +"%T %d.%m.%Y"`. "ISP1. [STATUS - OK]. Current packet loss on ${ovpn} via ${dev_ovpn} is ${gw1_curr_packet_loss}%." >> ${log}
+        echo `date +"%T %d.%m.%Y"`. "ISP1. [STATUS - OK]. Current packet loss on ${ovpn} via ${dev_ovpn} is ${gw1_curr_packet_loss}%. And ${dev_tun} is up" >> ${log}
         gw1_curr_status=1
     else
-        echo `date +"%T %d.%m.%Y"`. "ISP1. [STATUS - CRITICAL]. Current packet loss on ${ovpn} via ${dev_ovpn} is ${gw1_curr_packet_loss}%." >> ${log}
+        echo `date +"%T %d.%m.%Y"`. "ISP1. [STATUS - CRITICAL]. Current packet loss on ${ovpn} via ${dev_ovpn} is ${gw1_curr_packet_loss}%. And tun0 is down" >> ${log}
         gw1_curr_status=0
     fi
-
+}
 # Данная функция производит переключение шлюза по умолчанию в зависимости от результатов полученных в get_current_status ()
 # На данный момент предпочитаемым шлюзом может быть только ${gw1}
 switch_default_gw ()
