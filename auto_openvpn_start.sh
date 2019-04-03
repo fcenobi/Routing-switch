@@ -38,7 +38,7 @@ init ()
 # Отчищаем log-файл и сохраняем значения основных переменных
     clear_log
     echo `date +"%T %d.%m.%Y"`." Init environment OK. Check OpenVPN status every ${check_period}." >> ${log}
-    echo `date +"%T %d.%m.%Y"`." [OpenVPN server IP=${ovpn}, Google DNS=${dns1}]." >> ${log}
+    echo `date +"%T %d.%m.%Y"`." [OpenVPN server IP = ${ovpn}, Google DNS = ${dns1}]." >> ${log}
 }
 
 # Данная функция определяет текущее состояние OpenVPN шлюза.
@@ -60,8 +60,9 @@ ovpn_curr_packet_loss=`ping -I ${dev_ovpn} -c20 -l20 -q -W3 ${dns1} | grep loss 
     then
         echo `date +"%T %d.%m.%Y"`. "OpenVPN: [STATUS - OK]. Current OpenVPN gateway running up. Nothing to do." >> ${log}
     else
-        echo `date +"%T %d.%m.%Y"`. "OpenVPN: [STATUS - CRITICAL]. Current packet loss on ${ovpn} via ${dev_ovpn} is ${ovpn_curr_packet_loss}%." >> ${log}
-        echo `date +"%T %d.%m.%Y"`. "But tun0 is UP. Restart OpenVPN." >> ${log}
+        echo "******************************************************************************************************************************************************************" >> ${log}
+        echo `date +"%T %d.%m.%Y"`. "OpenVPN: [STATUS - CRITICAL]. Current packet loss on ${ovpn} via ${dev_ovpn} is ${ovpn_curr_packet_loss}%. But tun0 is UP. Restart OpenVPN." >> ${log}
+        echo "******************************************************************************************************************************************************************" >> ${log}
     /etc/init.d/openvpn restart
     fi
 else
