@@ -53,11 +53,24 @@ get_current_status ()
 {
     echo `date +"%T %d.%m.%Y"`." Get current status ISP gateways." >> ${log}
 
+###################
+##    dev_tun=`ifconfig | grep tun0 | awk '{print $1}'`
+##    if [ "${dev_tun}" == "tun0" ]
+##    then
+##        echo "OK"
+##    echo "${dev_tun}"
+##    else
+##        echo "BAD"
+##    echo ${dev_tun}
+##    fi
+###################
+
 # Get current status default gateway ISP1/Проверяем пинги до DNS Google
+    dev_tun=`ifconfig | grep tun0 | awk '{print $1}'`
     ovpn_curr_packet_loss=`ping -I ${dev_ovpn} -c20 -l20 -q -W3 ${dns1} | grep loss | awk '{print $(NF-4)}' | cut -d"%" -f1`
 #    dev_tun=`ifconfig | grep tun0 | awk '{print $1}'`
 
-    if [ ${ovpn_curr_packet_loss} -le ${gw1_max_packet_loss} ]
+    if [ "${dev_tun}" == "tun0" -a ${ovpn_curr_packet_loss} -le ${gw1_max_packet_loss} ]
     then
         echo `date +"%T %d.%m.%Y"`. "ISP1. [STATUS - OK]. Current packet loss on ${ovpn} via ${dev_ovpn} is ${gw1_curr_packet_loss}%." >> ${log}
         gw1_curr_status=1
