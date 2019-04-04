@@ -45,7 +45,7 @@ init ()
 # Если текущий процент потерь меньше максимально допустимого, то считаем, что шлюз доступен.
 get_current_status ()
 {
-    echo `date +"%T %d.%m.%Y"`." Get current status OpenVPN gateways." >> ${log}
+    echo `date +"%T %d.%m.%Y"`." Get current status OpenVPN gateway." >> ${log}
 
 # Проверяем интерфейс tun0, если ОК, то проверяем пинги до DNS от Google, иначе перезапускаем OpenVPN на клиенте.
 
@@ -63,12 +63,14 @@ ovpn_curr_packet_loss=`ping -I ${dev_ovpn} -c20 -l20 -q -W3 ${dns1} | grep loss 
         echo "**************************************************************************************************************************************" >> ${log}
         echo `date +"%T %d.%m.%Y"`. "OpenVPN: [STATUS - CRITICAL]. Current packet loss on ${ovpn} via ${dev_ovpn} is ${ovpn_curr_packet_loss}%. But tun0 is UP. Restart OpenVPN." >> ${log}
         echo "**************************************************************************************************************************************" >> ${log}
+(echo "From: SENDER <system@domain.com>" ; echo "To: USER <admin@domain.com>" ; echo "Subject: OpenVPN gateway is DOWN." ; echo "OpenVPN status critical. Restart OpenVPN." ; echo `date +"%T %d.%m.%Y"`) | cat | sendmail admin@domain.com
     /etc/init.d/openvpn restart
     fi
 else
     echo "***************************************************************" >> ${log}
     echo `date +"%T %d.%m.%Y"`. "CRITICAL. tun0 is DOWN. Restart OpenVPN." >> ${log}
     echo "***************************************************************" >> ${log}
+(echo "From: SENDER <system@domain.com>" ; echo "To: USER <admin@domain.com>" ; echo "Subject: OpenVPN tun0 is DOWN." ; echo "tun0 status critical. Restart OpenVPN." ; echo `date +"%T %d.%m.%Y"`) | cat | sendmail admin@domain.com
     /etc/init.d/openvpn restart
 fi
 
